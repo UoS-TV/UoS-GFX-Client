@@ -1,5 +1,5 @@
 {
-  "name": "UoS-GFX-Client",
+  "name": "uos-gfx-client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
