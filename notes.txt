@@ -1,0 +1,13 @@
+ok so
+
+use rundown creator api
+
+on screen:
+    top bar nav menu
+        pages
+        rundown selector
+        settings
+            api config
+
+    main view with items
+    bottom bar with caspar override text
