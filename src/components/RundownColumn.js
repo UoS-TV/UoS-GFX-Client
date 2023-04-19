@@ -4,9 +4,7 @@ import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
-import Row from "react-bootstrap/Row";
-import Container from "react-bootstrap/Container";
-import Col from "react-bootstrap/Col";
+import GFXItem from "./GFXItem";
 
 const RundownColumn = () => {
   const [rundown, setRundown] = useState("");
@@ -14,6 +12,8 @@ const RundownColumn = () => {
   // const [apiToken, setapiToken] = useState("");
 
   const [options, setOptions] = useState([]);
+
+  const [sel, setSel] = useState("");
 
   const [items, setItems] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -45,11 +45,11 @@ const RundownColumn = () => {
   return (
         <Form onSubmit={handleFormSubmit}>
           <InputGroup className="mb-3">
-            <FloatingLabel controlId="floatingInput" label="API Token">
+            <FloatingLabel controlId="floatingInput" label="Rundown ID">
               <Form.Control
                 type="number"
-                //   value={apiToken}
-                // defaultValue={"VzPXfFFfTy6mvOVxmIy4EMpYlU84lI"}
+                  // value={apiToken}
+                defaultValue={"143"}
                 onChange={(e) => setRundown(e.target.value)}
                 />
             </FloatingLabel>
@@ -57,9 +57,13 @@ const RundownColumn = () => {
             Submit
           </Button>
           </InputGroup>
-          
-            {JSON.stringify(options, null, 2)}
+            {options.map( option => {
+          return(
+            <GFXItem data={option}/>
+          )
+        })}
         </Form>
+        
   );
 };
 
