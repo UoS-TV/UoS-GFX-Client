@@ -14,15 +14,6 @@ function MainSection() {
       <Row>
         <Col sm={6}>
           <RundownColumn />
-          {/* <div>
-      <ItemTemplate/>
-      </div>
-<div className="d-flex justify-content-between">
-      <ButtonGroup className="">
-          <Button variant="outline-success">Add Template Item</Button>
-          <Button variant="outline-success">Add Scorebug Item</Button>
-        </ButtonGroup>
-      </div> */}
         </Col>
         <Col sm={6}>
         <DynamicForm />
