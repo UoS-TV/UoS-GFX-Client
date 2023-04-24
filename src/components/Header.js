@@ -1,9 +1,17 @@
-import Container from 'react-bootstrap/Container';
-import Nav from 'react-bootstrap/Nav';
-import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
+import Container from "react-bootstrap/Container";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+
+import React, { useState } from "react";
+
+import { BsFillGearFill } from "react-icons/bs";
+import ConfigModal from "./ConfigModal";
 
 function Header() {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   return (
     <Navbar bg="light" expand="lg">
       <Container>
@@ -13,9 +21,10 @@ function Header() {
           <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/RundownSelector">Rundown Selector</Nav.Link>
-            <Nav.Link href="/about">Link</Nav.Link>
           </Nav>
         </Navbar.Collapse>
+        <BsFillGearFill variant="primary" onClick={handleShow} />
+        <ConfigModal isModalVisible={show} handleShow={() => setShow(false)} />
       </Container>
     </Navbar>
   );
