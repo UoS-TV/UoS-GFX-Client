@@ -1,12 +1,10 @@
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-// import Button from "react-bootstrap/Button";
-// import ButtonGroup from "react-bootstrap/ButtonGroup";
 
-// import ItemTemplate from "./ItemTemplate";
-import DynamicForm from "./DynamicForm.js";
+// import DynamicForm from "./DynamicForm.js";
 import RundownColumn from "./RundownColumn.js";
+import CustomColumn from "./CustomColumn.js";
 
 function MainSection() {
   return (
@@ -16,7 +14,8 @@ function MainSection() {
           <RundownColumn />
         </Col>
         <Col sm={6}>
-        <DynamicForm />
+          {/* <DynamicForm /> */}
+          <CustomColumn />
         </Col>
       </Row>
     </Container>
