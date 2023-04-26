@@ -7,7 +7,7 @@ on screen:
         pages
         rundown selector
         settings
-            api config
+            api config no this is now in config file
 
     main view with items
     bottom bar with caspar override text
