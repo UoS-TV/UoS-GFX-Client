@@ -1,9 +1,7 @@
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-const SaveConfig = () => {
-    console.log("function to save config file");
-};
+import configData from "../config.json";
 
 const ConfigModal = ({ isModalVisible, handleShow }) => {
   return (
@@ -15,17 +13,13 @@ const ConfigModal = ({ isModalVisible, handleShow }) => {
         keyboard={false}
       >
         <Modal.Header>
-          <Modal.Title>Modal title</Modal.Title>
+          <Modal.Title>Config file</Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          I will not close if you click outside me. Don't even try to press
-          escape key.
-        </Modal.Body>
+        <Modal.Body>{JSON.stringify(configData, undefined, 2)}</Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleShow}>
             Close
           </Button>
-          <Button variant="primary" onClick={SaveConfig}>Save</Button>
         </Modal.Footer>
       </Modal>
     </div>
