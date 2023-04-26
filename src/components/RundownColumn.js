@@ -1,12 +1,13 @@
-import { useState } from "react";
-
 import Form from "react-bootstrap/Form";
-import FloatingLabel from "react-bootstrap/FloatingLabel";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import GFXItem from "./GFXItem";
 import Card from "react-bootstrap/Card";
+import Row from "react-bootstrap/Row";
 import styled from "styled-components";
+
+import { UserContext } from "./context.jsx";
+import { useContext, useState } from "react";
 
 export const BorderCard = styled(Card)`
   background: ${(props) => (props.selected ? "#E8F1FF" : "#FFFFFF")};
@@ -15,68 +16,112 @@ export const BorderCard = styled(Card)`
 `;
 
 const RundownColumn = () => {
-  const [rundown, setRundown] = useState("");
+  const contexts = useContext(UserContext);
+
+  const url =
+    "https://www.rundowncreator.com/" +
+    contexts.api.station +
+    "/API.php?APIKey=" +
+    contexts.api.key +
+    "&APIToken=" +
+    contexts.api.token;
+
+  // const url =
+  // "https://www.rundowncreator.com/surrey/API.php?APIKey=samsarjudeen&APIToken=VzPXfFFfTy6mvOVxmIy4EMpYlU84lI";
+
+  const [selectedRundown, setSelectedRundown] = useState("");
 
   const [options, setOptions] = useState([]);
+  const [rundowns, setRundowns] = useState([]);
 
-  var results = [];
+  const [isSelected, setisSelected] = useState(0);
+  const [selectedItem, setSelectedItem] = useState(null);
 
-  // station = "surrey";
-  // apiKey = "samsarjudeen";
-  // apiToken = "VzPXfFFfTy6mvOVxmIy4EMpYlU84lI";
-
-  const handleFormSubmit = (event) => {
+  const handleGetRundowns = (event) => {
     event.preventDefault();
-
-    // const url = "https://www.rundowncreator.com/" +
-    //     station +
-    //     "/API.php?APIKey=" +
-    //     apiKey +
-    //     "&APIToken=" +
-    //     apiToken +
-    // "&Action=getRundowns";
-    const url =
-      "https://www.rundowncreator.com/surrey/API.php?APIKey=samsarjudeen&APIToken=VzPXfFFfTy6mvOVxmIy4EMpYlU84lI&Action=getRows&RundownID=" +
-      rundown;
 
     console.log(url);
 
-    fetch(url)
+    fetch(url + "&Action=getRundowns")
       .then((response) => response.json())
-      .then((data) => setOptions(data));
+      .then((data) => {
+        setRundowns(data);
+        console.log("Rundowns Gathered:", data.length);
+      });
   };
 
-  const [isSelected, setisSelected] = useState(0);
+  const handleSelectChange = (event) => {
+    event.preventDefault();
+    const selectedItemId = event.target.value;
+    const selectedItem = rundowns.find(
+      (option) => option.RundownID === parseInt(selectedItemId)
+    );
+    console.log("Selected Rundown ID:", selectedItemId);
+    setSelectedItem(selectedItem);
+    setSelectedRundown(selectedItemId);
+    // this.props.parentCallback(JSON.stringify(selectedItem));
+  };
+
+  const handleGetItems = (event) => {
+    event.preventDefault();
+    fetch(url + "&Action=getRows&RundownID=" + selectedRundown)
+      .then((response) => response.json())
+      .then((data) => {
+        setOptions(data);
+        console.log(data);
+      });
+  };
 
   return (
-    <Form onSubmit={handleFormSubmit}>
-      <InputGroup className="mb-3">
-        <FloatingLabel controlId="floatingInput" label="Rundown ID">
-          <Form.Control
-            type="number"
-            // defaultValue={"143"}
-            onChange={(e) => setRundown(e.target.value)}
-          />
-        </FloatingLabel>
-        <Button variant="primary" type="submit">
-          Get Rundown
-        </Button>
-      </InputGroup>
-      {options.map((option, index) => {
-        const results = [];
-        return (
-          <>
-            <GFXItem
-              data={option}
-              dyTags={results}
-              key={option.RowID}
-              selected={isSelected === option.RowID}
-              onChange={() => {setisSelected(option.RowID)}}
-            />
-          </>
-        );
-      })}
-    </Form>
+    <div className="my-4">
+      <Row pt={4}>
+        <Form>
+          <InputGroup>
+            <Button variant="primary" onClick={handleGetRundowns}>
+              Get Rundowns
+            </Button>
+            <Form.Select
+              // key={selectedItem.RundownID}
+              value={selectedItem ? selectedItem.RundownID : ""}
+              onChange={handleSelectChange}
+            >
+              <option>RundownID - Rundown Title</option>
+              {rundowns.map((option) => (
+                <option key={option.RundownID} value={option.RundownID}>
+                  {option.RundownID} - {option.Title}
+                </option>
+              ))}
+            </Form.Select>
+            <Button variant="primary" onClick={handleGetItems}>
+              Get Items
+            </Button>
+          </InputGroup>
+          {options.map((option, index) => {
+            const results = [];
+            return (
+              <>
+                <GFXItem
+                  data={option}
+                  dyTags={results}
+                  key={option.RowID}
+                  selected={isSelected === option.RowID}
+                  onChange={() => {
+                    setisSelected(option.RowID);
+                  }}
+                />
+              </>
+            );
+          })}
+        </Form>
+      </Row>
+      <Row>
+        {selectedItem && (
+          <div>
+            <p>{JSON.stringify(selectedItem, null, 2)}</p>
+          </div>
+        )}
+      </Row>
+    </div>
   );
 };
 
