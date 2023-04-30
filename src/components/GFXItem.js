@@ -1,107 +1,149 @@
 import { useContext, useState } from "react";
 
+import { v4 as uuidv4 } from "uuid";
+
 import Card from "react-bootstrap/Card";
-import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import InputGroup from "react-bootstrap/InputGroup";
+import Button from "react-bootstrap/Button";
 
-import {
-  BsPlayFill,
-  BsSkipEndFill,
-  // BsArrowClockwise,
-  BsStopFill,
-  // BsCommand,
-} from "react-icons/bs";
-import { BorderCard } from "./RundownColumn";
+import { BsTrashFill } from "react-icons/bs";
+
+import CGButtons from "./CGButtons";
 
 import { UserContext } from "./context.jsx";
 
-var getFilename = function (str) {
-  return str.split("\\").pop().split("/").pop();
-};
-
-var getFolder = function (str) {
-  return str.split("/").slice(0, -1).join("/");
-};
-
-const GFXItem = ({ data, dyTags, selected, onChange }) => {
+const GFXItem = (props) => {
   const contexts = useContext(UserContext);
-  const cgAction = contexts.actions;
 
-  const ManagePayload = () => {
-    return data.gfxtemplate + data.gfxpayload;
+  // const [itemTitle, setItemTitle] = useState("Template")
+  const [channel, setChannel] = useState(props.data.channel);
+  const [layer, setLayer] = useState(props.data.layer);
+  const [template, setTemplate] = useState("");
+  const [dyTags, setDyTags] = useState(props.data.dyTags);
+  var isAPI = false;
+  if (props.data.type === "API") {
+    isAPI = true;
+  }
+
+  const handleAddDyField = () => {
+    let _dyTags = [...dyTags];
+    _dyTags.push(props.data.dyTags);
+    setDyTags(_dyTags);
   };
 
-  const [channel, setChannel] = useState(contexts.defaultChannel);
-  const [layer, setLayer] = useState(contexts.defaultLayer);
-
-  const GFXPlay = function (payload) {
-    const cgCommand =
-      "PLAY " + channel + "-" + layer + " " + ManagePayload(payload);
-    cgAction.play(cgCommand);
+  const handleRemoveDyField = (id) => {
+    console.log("removing", id);
+    let _dyTags = [...dyTags];
+    _dyTags.splice(id, 1);
+    setDyTags(_dyTags);
   };
 
-  // Received message from 127.0.0.1: CG 1-20 ADD 1 "UOS-GFX-PACKAGE/L3RD-DYNAMIC" 1 "{\"f0\":\"this is f0\",\"f1\":\"this is f1\"}"\r\n
-  // const cgAction = 'hello'
+  const DeleteItemButton = () => {
+    if (!isAPI) {
+      return (
+        <Button
+          variant="outline-danger"
+          onClick={() => props.data.delItem(props.data.id)}
+        >
+          Delete Item
+        </Button>
+      );
+    }
+  };
+
+  const RemoveDyFieldButton = ({ id }) => {
+    {
+      if (!isAPI) {
+        return (
+          <Button
+            variant="outline-danger"
+            onClick={() => handleRemoveDyField(id)}
+          >
+            <BsTrashFill />
+          </Button>
+        );
+      }
+    }
+  };
+
+  const AddDyFieldButton = () => {
+    {
+      if (!isAPI) {
+        return (
+          <Button
+            variant="outline-success"
+            size="sm"
+            className="float-end"
+            onClick={handleAddDyField}
+          >
+            Add Dynamic Field
+          </Button>
+        );
+      }
+    }
+  };
 
   return (
     <>
-      <BorderCard
-        className="row-section__inner mb-3"
-        selected={selected}
-        onClick={onChange}
-      >
+      <Card className="my-2">
         <Card.Header
           as="h5"
           className="d-flex justify-content-between align-items-center"
         >
-          {data.StorySlug}
+          {props.title}
+          <DeleteItemButton />
         </Card.Header>
         <Card.Body>
-          <InputGroup className="mb-3">
-            <InputGroup.Text id="basic-addon3">
-              {getFolder(data.gfxtemplate)}
-            </InputGroup.Text>
-            <Form.Control
-              className="templateSelect"
-              type="text"
-              value={getFilename(data.gfxtemplate)}
-              readOnly
-            />
-          </InputGroup>
-
-          {dyTags.map((dyTag, index) => {
-            return (
-              <div className="my-2">
-                <InputGroup>
-                  <FloatingLabel
-                    controlId="floatingInput"
-                    label="Dynamic ID Tag (e.g. f0)"
-                  >
-                    <Form.Control
-                      readOnly
-                      name="dyID"
-                      type="text"
-                      placeholder="f0"
-                      value={dyTag.dyTagID}
-                    />
-                  </FloatingLabel>
-                  <FloatingLabel controlId="floatingInput" label="Data">
-                    <Form.Control
-                      name="dyData"
-                      type="text"
-                      placeholder="Data"
-                      value={dyTag.dyTagData}
-                    />
-                  </FloatingLabel>
-                </InputGroup>
-              </div>
-            );
-          })}
+          <Form.Select
+            onChange={(e) => setTemplate(e.target.value)}
+            readOnly={isAPI} // if it's a api template make it readOnly
+          >
+            <option>Select Template</option>
+            {contexts.items.templates.map((template) => (
+              <option key={template} value={template}>
+                {template}
+              </option>
+            ))}
+          </Form.Select>
+          {dyTags.map((dyTag) => (
+            <div className="my-2" key={dyTag.id}>
+              <InputGroup>
+                {/* <InputGroup.Text>{dyTag.id}</InputGroup.Text> */}
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Dynamic ID Tag (e.g. f0)"
+                >
+                  <Form.Control
+                    name="dyID"
+                    type="text"
+                    defaultValue={dyTag.dyID}
+                    readOnly={isAPI}
+                    onChange={(e) => (dyTag.dyID = e.target.value)}
+                  />
+                </FloatingLabel>
+                <FloatingLabel controlId="floatingInput" label="Data">
+                  <Form.Control
+                    name="dyData"
+                    type="text"
+                    defaultValue={dyTag.dyData}
+                    readOnly={isAPI}
+                    onChange={(e) => (dyTag.dyData = e.target.value)}
+                  />
+                </FloatingLabel>
+                <RemoveDyFieldButton id={dyTag.id} />
+              </InputGroup>
+            </div>
+          ))}
+          <Button size="sm" onClick={() => console.table(dyTags)}>
+            Log dyTags
+          </Button>
+          <AddDyFieldButton />
         </Card.Body>
-        <Card.Footer className="text-muted">
-          <InputGroup className="w-100">
+        <Card.Footer className="text-muted d-flex justify-content-between align-items-center">
+          Item ID: {props.data.id}
+          <InputGroup className="w-50">
             <FloatingLabel controlId="floatingInput" label="Channel">
               <Form.Control
                 type="number"
@@ -124,18 +166,10 @@ const GFXItem = ({ data, dyTags, selected, onChange }) => {
                 }}
               />
             </FloatingLabel>
-            <Button variant="success" onClick={GFXPlay}>
-              <BsPlayFill /> Play
-            </Button>
-            <Button variant="info">
-              <BsSkipEndFill /> Next
-            </Button>
-            <Button variant="danger">
-              <BsStopFill /> Stop
-            </Button>
+            <CGButtons data={{ channel, layer, template, dyTags }} />
           </InputGroup>
         </Card.Footer>
-      </BorderCard>
+      </Card>
     </>
   );
 };
