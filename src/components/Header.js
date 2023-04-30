@@ -5,7 +5,7 @@ import Navbar from "react-bootstrap/Navbar";
 import React, { useState } from "react";
 
 import { BsFillGearFill } from "react-icons/bs";
-import ConfigModal from "./ConfigModal";
+import ConfigModal from "./old/ConfigModal";
 
 function Header() {
   const [show, setShow] = useState(false);
