@@ -1,8 +1,12 @@
 {
-  "channels": 3,
+  "channels": 2,
   "api": {
     "station": "surrey",
     "key": "samsarjudeen",
     "token": "VzPXfFFfTy6mvOVxmIy4EMpYlU84lI"
+  },
+  "casparcg": {
+    "host": "127.0.0.1",
+  "port": 5250
   }
 }
