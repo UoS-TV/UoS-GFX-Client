@@ -22,3 +22,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 notes.txt
+src/components/old/ConfigModal.js
+src/components/old/CustomColumnOLD.js
+src/components/old/DynamicForm.js
+src/components/old/GFXItemOLD.js
