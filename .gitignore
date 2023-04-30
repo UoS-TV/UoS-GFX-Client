@@ -26,3 +26,4 @@ src/components/old/ConfigModal.js
 src/components/old/CustomColumnOLD.js
 src/components/old/DynamicForm.js
 src/components/old/GFXItemOLD.js
+src/config.json
