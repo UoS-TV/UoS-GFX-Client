@@ -3,8 +3,9 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import GFXItem from "./GFXItem";
 import Card from "react-bootstrap/Card";
-import Row from "react-bootstrap/Row";
 import styled from "styled-components";
+
+import { v4 as uuidv4 } from "uuid";
 
 import { UserContext } from "./context.jsx";
 import { useContext, useState } from "react";
@@ -74,53 +75,75 @@ const RundownColumn = () => {
 
   return (
     <div className="my-4">
-      <Row pt={4}>
-        <Form>
-          <InputGroup>
-            <Button variant="primary" onClick={handleGetRundowns}>
-              Get Rundowns
-            </Button>
-            <Form.Select
-              // key={selectedItem.RundownID}
-              value={selectedItem ? selectedItem.RundownID : ""}
-              onChange={handleSelectChange}
-            >
-              <option>RundownID - Rundown Title</option>
-              {rundowns.map((option) => (
-                <option key={option.RundownID} value={option.RundownID}>
-                  {option.RundownID} - {option.Title}
-                </option>
-              ))}
-            </Form.Select>
-            <Button variant="primary" onClick={handleGetItems}>
-              Get Items
-            </Button>
-          </InputGroup>
-          {options.map((option, index) => {
-            const results = [];
-            return (
-              <>
-                <GFXItem
-                  data={option}
-                  dyTags={results}
-                  key={option.RowID}
-                  selected={isSelected === option.RowID}
-                  onChange={() => {
-                    setisSelected(option.RowID);
-                  }}
-                />
-              </>
-            );
-          })}
-        </Form>
-      </Row>
-      <Row>
-        {selectedItem && (
-          <div>
-            <p>{JSON.stringify(selectedItem, null, 2)}</p>
-          </div>
-        )}
-      </Row>
+      <Form>
+        <InputGroup>
+          <Button variant="primary" onClick={handleGetRundowns}>
+            Get Rundowns
+          </Button>
+          <Form.Select
+            // key={selectedItem.RundownID}
+            value={selectedItem ? selectedItem.RundownID : ""}
+            onChange={handleSelectChange}
+          >
+            <option>RundownID - Rundown Title</option>
+            {rundowns.map((option) => (
+              <option key={option.RundownID} value={option.RundownID}>
+                {option.RundownID} - {option.Title}
+              </option>
+            ))}
+          </Form.Select>
+          <Button variant="success" onClick={handleGetItems}>
+            Get Items
+          </Button>
+        </InputGroup>
+        {options.map((option) => {
+          // const helloThere = () => {
+            // try {
+              var gfxData = JSON.parse(option.graphics);
+              var newObj = [];
+              // console.log("Trying to execute the function");
+              for (const [key, value] of Object.entries(gfxData.data)) {
+                newObj.push({
+                  dyID: key,
+                  dyData: value,
+                  id: uuidv4(),
+                });
+              }
+              // console.log(newObj);
+              // var newData = { template: gfxData.template, dynamicTags: newObj };
+              // return newData
+            // } catch (e) {
+              // console.log("ERROR", e);
+            // }
+          // };
+
+          var itemData = {
+            id: uuidv4(),
+            type: "API",
+            item: "",
+            template: gfxData.template,
+            channel: contexts.defaultChannel,
+            layer: contexts.defaultLayer,
+            dyTags: newObj
+          };
+
+          return (
+            <>
+              {/* <Button onClick={doSomething}>Hello</Button> */}
+              <GFXItem
+                data={itemData}
+                title={option.StorySlug}
+                // dyTags={results}
+                // key={option.RowID}
+                // selected={isSelected === option.RowID}
+                // onChange={() => {
+                //   setisSelected(option.RowID);
+                // }}
+              />
+            </>
+          );
+        })}
+      </Form>
     </div>
   );
 };
