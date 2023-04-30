@@ -26,7 +26,7 @@ const phantomStyle = {
 };
 
 function Footer(props) {
-  const action = useContext(UserContext).actions;
+  const contexts = useContext(UserContext);
 
   return (
     <div>
@@ -37,13 +37,13 @@ function Footer(props) {
             <Form
               onSubmit={(event) => {
                 event.preventDefault();
-                action.play(event.target.command.value);
+                contexts.itemActions.custom(event.target.command.value);
               }}
             >
               <InputGroup>
                 <FloatingLabel
                   controlId="floatingInput"
-                  label={"last command: " + props.value}
+                  label={"Last Command: " + props.value}
                 >
                   <Form.Control name="command" />
                 </FloatingLabel>
@@ -55,7 +55,7 @@ function Footer(props) {
                     <Button
                       key={value}
                       variant="secondary"
-                      onClick={() => action.custom("CLEAR " + (value + 1))}
+                      onClick={() => contexts.itemActions.custom("CLEAR " + (value + 1))}
                     >
                       CLEAR CH. {value + 1}
                     </Button>
@@ -63,7 +63,7 @@ function Footer(props) {
                 })}
                 <Button
                   variant="dark"
-                  onClick={() => action.custom("CLEAR ALL")}
+                  onClick={() => contexts.itemActions.custom("CLEAR ALL")}
                 >
                   CLEAR ALL
                 </Button>
