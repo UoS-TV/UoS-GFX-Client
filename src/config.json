@@ -7,6 +7,7 @@
   },
   "casparcg": {
     "host": "127.0.0.1",
-  "port": 5250
+  "port": 5250,
+  "templateLocation": "??"
   }
 }
