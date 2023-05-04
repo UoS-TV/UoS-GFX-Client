@@ -1,23 +1,30 @@
 // server/index.js
 
 const express = require("express");
+const app = express();
+const path = require("path");
+var fs = require("fs");
+const cors = require("cors");
+const net = require("net");
+const glob = require("glob");
 
-var net = require("net");
-var config = {
-  host: "127.0.0.1",
-  port: 5250,
-};
+const PORT = process.env.PORT || 3001;
+
+app.use(express.json());
+app.use(cors());
+
+const config = require("../src/config.json");
 
 let client = new net.Socket();
 
 function connect() {
-  client.connect(config.port, config.host, () => {
+  client.connect(config.casparcg.port, config.casparcg.host, () => {
     console.log("Connected");
   });
 
-  client.on("data", (data) => {
-    console.log("Received: " + data);
-  });
+  // client.on("data", (data) => {
+  //   console.log("Received: " + data);
+  // });
 
   client.on("close", () => {
     console.log("Connection closed");
@@ -43,51 +50,28 @@ const reconnect = () => {
 
 connect();
 
-const path = require("path");
-
-const PORT = process.env.PORT || 3001;
-
-const app = express();
-app.use(express.json());
-
-const cors = require("cors");
-
-app.use(cors());
-
-// app.get("/api", (req, res) => {
-//   res.json({ message: "Hello from server!" });
-// });
-
 app.post("/data", (req, res) => {
   const body = req.body.data;
   client.write(body + "\r\n", function (e) {
-    console.log("CG command sent:", body);
+    console.log("Sent:", body);
   });
   client.once("data", (data) => {
     console.log("Received: " + data);
     res.send(data);
   });
 });
-
+let items = { templates: [], media: [] };
 app.post("/filegetter", (req, res) => {
-  const type = req.body.type;
-  // console.log(type);
-  if (type === "media") {
-    res.send(fileGetter(mediaLocation, "*"));
-  } else if (type === "templates") {
-    res.send(fileGetter(templateLocation, "html"));
-  } else {
-    res.send([]);
-  }
+  console.log("Getting library files");
+  items.media = fileGetter(config.casparcg.mediaLocation, "*");
+  items.templates = fileGetter(config.casparcg.templateLocation, "html");
+  res.send(items);
+  console.log(items);
 });
 
 app.listen(PORT, () => {
   console.log(`Server listening on ${PORT}`);
 });
-
-glob = require("glob");
-const templateLocation = "C:/casparcg/template/";
-const mediaLocation = "C:/casparcg/media/";
 
 const fileGetter = (location, extension) => {
   var fullPaths = [];
@@ -101,6 +85,5 @@ const fileGetter = (location, extension) => {
       .replace(location, "") // remove location
       .replace(path.parse(fullPaths[i]).ext, ""); // remove file extension
   }
-  // console.log(shortPaths);
   return shortPaths;
 };
