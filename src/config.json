@@ -7,7 +7,8 @@
   },
   "casparcg": {
     "host": "127.0.0.1",
-  "port": 5250,
-  "templateLocation": "??"
+    "port": 5250,
+    "templateLocation": "C:/casparcg/template/",
+    "mediaLocation": "C:/casparcg/media/"
   }
 }
