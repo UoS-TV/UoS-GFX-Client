@@ -43,27 +43,34 @@ function Footer(props) {
               <InputGroup>
                 <FloatingLabel
                   controlId="floatingInput"
-                  label={"Last Command: " + props.value}
+                  label={"SERVER RESPONSE: " + props.command.response}
                 >
-                  <Form.Control name="command" />
+                  <Form.Control
+                    name="command"
+                    defaultValue={props.command.last}
+                  />
                 </FloatingLabel>
                 <Button variant="warning" type="submit">
                   Send Command
                 </Button>
-                {[...Array(props.channels)].map((e, value) => {
+                {[...Array(props.channels)].map((e, i) => {
                   return (
                     <Button
-                      key={value}
+                      key={i}
                       variant="secondary"
-                      onClick={() => contexts.itemActions.custom("CLEAR " + (value + 1))}
+                      onClick={() =>
+                        contexts.itemActions.custom("CLEAR " + (i + 1))
+                      }
                     >
-                      CLEAR CH. {value + 1}
+                      CLEAR CH. {i + 1}
                     </Button>
                   );
                 })}
                 <Button
                   variant="dark"
-                  onClick={() => contexts.itemActions.custom("CLEAR ALL")}
+                  onClick={() => {
+                    contexts.itemActions.custom("CLEAR 1 CLEAR 2");
+                  }}
                 >
                   CLEAR ALL
                 </Button>
