@@ -13,6 +13,8 @@ import { BsTrashFill } from "react-icons/bs";
 import CGButtons from "./CGButtons";
 
 import { UserContext } from "./context.jsx";
+import { Col, Row } from "react-bootstrap";
+import Scorer from "./Scorer";
 
 const GFXItem = (props) => {
   const contexts = useContext(UserContext);
@@ -20,7 +22,7 @@ const GFXItem = (props) => {
   // const [itemTitle, setItemTitle] = useState("Template")
   const [channel, setChannel] = useState(props.data.channel);
   const [layer, setLayer] = useState(props.data.layer);
-  const [template, setTemplate] = useState("");
+  const [template, setTemplate] = useState(props.data.template);
   const [dyTags, setDyTags] = useState(props.data.dyTags);
   var isAPI = false;
   if (props.data.type === "API") {
@@ -29,7 +31,11 @@ const GFXItem = (props) => {
 
   const handleAddDyField = () => {
     let _dyTags = [...dyTags];
-    _dyTags.push(props.data.dyTags);
+    _dyTags.push({
+      dyID: "",
+      dyData: "",
+      id: uuidv4(),
+    });
     setDyTags(_dyTags);
   };
 
@@ -54,34 +60,62 @@ const GFXItem = (props) => {
   };
 
   const RemoveDyFieldButton = ({ id }) => {
-    {
-      if (!isAPI) {
-        return (
-          <Button
-            variant="outline-danger"
-            onClick={() => handleRemoveDyField(id)}
-          >
-            <BsTrashFill />
-          </Button>
-        );
-      }
+    if (!isAPI) {
+      return (
+        <Button
+          variant="outline-danger"
+          onClick={() => handleRemoveDyField(id)}
+        >
+          <BsTrashFill />
+        </Button>
+      );
     }
   };
 
   const AddDyFieldButton = () => {
-    {
-      if (!isAPI) {
-        return (
-          <Button
-            variant="outline-success"
-            size="sm"
-            className="float-end"
-            onClick={handleAddDyField}
-          >
-            Add Dynamic Field
-          </Button>
-        );
-      }
+    if (!isAPI) {
+      return (
+        <Button
+          variant="outline-success"
+          size="sm"
+          className="mt-2 float-end"
+          onClick={handleAddDyField}
+        >
+          Add Dynamic Field
+        </Button>
+      );
+    }
+  };
+
+  const DynamicFields = (props) => {
+    if (props.type === "Template") {
+      return (
+        <div>
+          {dyTags.map((dyTag) => (
+            <div key={dyTag.id}>
+              <InputGroup>
+                <Form.Control
+                  name="dyID"
+                  type="text"
+                  placeholder="Dynamic Tag ID (e.g. f0)"
+                  defaultValue={dyTag.dyID}
+                  readOnly={isAPI}
+                  onChange={(e) => (dyTag.dyID = e.target.value)}
+                />
+                <Form.Control
+                  name="dyData"
+                  type="text"
+                  defaultValue={dyTag.dyData}
+                  readOnly={isAPI}
+                  onChange={(e) => (dyTag.dyData = e.target.value)}
+                />
+                <RemoveDyFieldButton id={dyTag.id} />
+              </InputGroup>
+            </div>
+          ))}
+          <AddDyFieldButton />
+        </div>
+      );
     }
   };
 
@@ -96,50 +130,27 @@ const GFXItem = (props) => {
           <DeleteItemButton />
         </Card.Header>
         <Card.Body>
-          <Form.Select
-            onChange={(e) => setTemplate(e.target.value)}
-            readOnly={isAPI} // if it's a api template make it readOnly
-          >
-            <option>Select Template</option>
-            {contexts.items.templates.map((template) => (
-              <option key={template} value={template}>
-                {template}
-              </option>
-            ))}
-          </Form.Select>
-          {dyTags.map((dyTag) => (
-            <div className="my-2" key={dyTag.id}>
-              <InputGroup>
-                {/* <InputGroup.Text>{dyTag.id}</InputGroup.Text> */}
-                <FloatingLabel
-                  controlId="floatingInput"
-                  label="Dynamic ID Tag (e.g. f0)"
-                >
-                  <Form.Control
-                    name="dyID"
-                    type="text"
-                    defaultValue={dyTag.dyID}
-                    readOnly={isAPI}
-                    onChange={(e) => (dyTag.dyID = e.target.value)}
-                  />
-                </FloatingLabel>
-                <FloatingLabel controlId="floatingInput" label="Data">
-                  <Form.Control
-                    name="dyData"
-                    type="text"
-                    defaultValue={dyTag.dyData}
-                    readOnly={isAPI}
-                    onChange={(e) => (dyTag.dyData = e.target.value)}
-                  />
-                </FloatingLabel>
-                <RemoveDyFieldButton id={dyTag.id} />
-              </InputGroup>
-            </div>
-          ))}
-          <Button size="sm" onClick={() => console.table(dyTags)}>
-            Log dyTags
-          </Button>
-          <AddDyFieldButton />
+          <FloatingLabel label="Template">
+            <Form.Select
+              className="mb-2"
+              onChange={(e) => setTemplate(e.target.value)}
+              readOnly={isAPI} // if it's a api template make it readOnly
+              value={template}
+            >
+              {contexts.items.templates.map((template) => (
+                <option key={template} value={template}>
+                  {template}
+                </option>
+              ))}
+            </Form.Select>
+          </FloatingLabel>
+          <DynamicFields type={props.data.type} dyTags={dyTags} />
+          <Scorer
+            data={{ channel, layer, template }}
+            dyTags={dyTags}
+            setDyTags={setDyTags}
+            type={props.data.type}
+          />
         </Card.Body>
         <Card.Footer className="text-muted d-flex justify-content-between align-items-center">
           Item ID: {props.data.id}
