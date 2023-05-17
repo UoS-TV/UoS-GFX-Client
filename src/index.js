@@ -5,11 +5,6 @@ import { createRoot } from "react-dom/client";
 import React, { useState, useEffect } from "react";
 
 import axios from "axios";
-
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-import Header from "./components/old/Header";
-import MainSection from "./components/old/MainSection";
 import Footer from "./components/Footer";
 
 import { UserContext } from "./components/context";
@@ -18,6 +13,8 @@ import config from "./config.json";
 import FileSaver from "file-saver";
 import { Button, Container, Navbar } from "react-bootstrap";
 import CustomColumn from "./components/CustomColumn";
+
+import logo from "./logo.svg";
 
 const channels = config.channels;
 
@@ -85,6 +82,7 @@ const App = () => {
     return () => {
       ignore = true;
     };
+    // eslint-disable-next-line
   }, []);
 
   const allContexts = {
@@ -139,19 +137,13 @@ const App = () => {
     <UserContext.Provider value={allContexts}>
       <Navbar bg="light" expand="lg">
         <Container>
-          <Navbar.Brand href="#home">UoS Caspar Client</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            {/* <Nav className="me-auto"> */}
-            {/* <Nav.Link href="/">Home</Nav.Link> */}
-            {/* <Nav.Link href="/RundownSelector">Rundown Selector</Nav.Link> */}
-            {/* </Nav> */}
-          </Navbar.Collapse>
+          <Navbar.Brand href="#home">
+            <img alt="TV Studio Logo" src={logo} height="60px"/>{' '}
+            UoS Caspar Client
+            </Navbar.Brand>
           <Button variant="outline-info" size="sm" onClick={getItems}>
             Refresh Library
           </Button>
-          {/* <BsFillGearFill variant="primary" onClick={handleShow} />
-        <ConfigModal isModalVisible={show} handleShow={() => setShow(false)} /> */}
         </Container>
       </Navbar>
       <Container>
