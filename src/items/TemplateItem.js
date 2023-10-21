@@ -22,10 +22,10 @@ const TemplateItem = ({ onRemove, onMoveUp, onMoveDown }) => {
   const fetchTemplateOptions = () => {
     // Fetch template names from the server
     axios
-      .get("http://localhost:3002/list-templates")
+      .get("http://localhost:3002/list-files")
       .then((response) => {
-        setTemplateOptions(response.data);
-        console.log(response.data);
+        setTemplateOptions(response.data.templates);
+        console.log(response.data.templates);
       })
       .catch((error) => {
         console.error("Error fetching template names:", error);
