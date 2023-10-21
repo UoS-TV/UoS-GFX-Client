@@ -1,13 +1,13 @@
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
-import GFXItem from "../GFXItem";
+import GFXItem from "./GFXItem";
 import Card from "react-bootstrap/Card";
 import styled from "styled-components";
 
 import { v4 as uuidv4 } from "uuid";
 
-import { UserContext } from "../context.jsx";
+import { UserContext } from "./context.jsx";
 import { useContext, useState } from "react";
 
 export const BorderCard = styled(Card)`

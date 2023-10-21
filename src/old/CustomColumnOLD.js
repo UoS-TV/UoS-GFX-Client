@@ -11,9 +11,9 @@ import InputGroup from "react-bootstrap/InputGroup";
 import {
   BsTrashFill,
 } from "react-icons/bs";
-import { UserContext } from "../context";
-import CustomRundownButtons from "../RundownButtons";
-import CGButtons from "../CGButtons";
+import { UserContext } from "./context";
+import CustomRundownButtons from "./RundownButtons";
+import CGButtons from "./CGButtons";
 
 const CustomColumn = () => {
   const contexts = useContext(UserContext);

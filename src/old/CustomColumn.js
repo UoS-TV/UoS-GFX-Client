@@ -8,7 +8,7 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Form from "react-bootstrap/Form";
 
 import { UserContext } from "./context";
-import CustomRundownButtons from "./old/RundownButtons";
+import CustomRundownButtons from "./RundownButtons";
 import GFXItem from "./GFXItem";
 
 let fileReader = new FileReader();

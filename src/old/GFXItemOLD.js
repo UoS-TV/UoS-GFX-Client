@@ -5,11 +5,11 @@ import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import InputGroup from "react-bootstrap/InputGroup";
 
-import { BorderCard } from "../RundownColumn";
+import { BorderCard } from "./RundownColumn";
 
-import CGButtons from "../CGButtons"
+import CGButtons from "./CGButtons"
 
-import { UserContext } from "../context.jsx";
+import { UserContext } from "./context.jsx";
 
 var getFilename = function (str) {
   return str.split("\\").pop().split("/").pop();

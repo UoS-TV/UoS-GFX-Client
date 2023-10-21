@@ -1,7 +1,7 @@
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 
-import configData from "../../config.json";
+import configData from "../config.json";
 
 const ConfigModal = ({ isModalVisible, handleShow }) => {
   return (

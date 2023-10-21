@@ -1,5 +1,5 @@
 import Container from "react-bootstrap/Container";
-import CustomColumn from "../CustomColumn.js";
+import CustomColumn from "./CustomColumn.js";
 
 function MainSection() {
   return (
