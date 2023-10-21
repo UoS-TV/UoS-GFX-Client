@@ -1,18 +1,69 @@
 const express = require("express");
 const app = express();
-const path = require("path");
 const cors = require("cors");
-const glob = require("glob");
-
+const net = require("net");
 const config = require("../public/config.json");
-console.log(config)
+console.log(config);
+const glob = require("glob");
+const path = require("path");
+
 
 app.use(cors());
+app.use(express.json());
 
-app.get("/list-templates", (req, res) => {
-  const files = fileGetter(config.casparcg.templateLocation, "html");
-  console.log(files);
-  res.json(files);
+let client = new net.Socket();
+
+function connect() {
+  client.connect(config.casparcg.port, config.casparcg.host, () => {
+    console.log("Connected");
+  });
+
+  // client.on("data", (data) => {
+  //   console.log("Received: " + data);
+  // });
+
+  client.on("close", () => {
+    console.log("Connection closed");
+    reconnect();
+  });
+
+  client.on("end", () => {
+    console.log("Connection ended");
+    reconnect();
+  });
+
+  client.on("error", console.error);
+}
+
+// function that reconnect the client to the server
+const reconnect = () => {
+  console.log("Retrying connection to CasparCG server in 5s");
+  setTimeout(() => {
+    client.removeAllListeners(); // the important line that enables you to reopen a connection
+    connect();
+  }, 5000);
+};
+
+connect();
+
+app.post("/data", (req, res) => {
+  const body = req.body.data;
+  // const body = "INFO 1-1"
+  client.write(body + "\r\n", function (e) {
+    console.log("Sent:", body);
+  });
+  client.once("data", (data) => {
+    console.log("Received: " + data);
+    res.send(data);
+  });
+});
+
+// Define an endpoint to get template and media files
+app.get("/list-files", (req, res) => {
+  const templates = fileGetter(config.casparcg.templateLocation, "html");
+  const media = fileGetter(config.casparcg.mediaLocation, "*");
+console.log(templates);
+  res.json({ templates, media });
 });
 
 app.listen(3002, () => {
@@ -24,6 +75,7 @@ const fileGetter = (location, extension) => {
     console.log(file);
     return file
       .replace(/\\/g, "/") // replace double backslash with forwardslash
-      .replace(location, ""); // remove location;
+      .replace(location, "") // remove location;
+      .replace("."+extension, "");
   });
 };
