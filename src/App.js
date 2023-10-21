@@ -34,7 +34,7 @@ function App() {
             {/* Add routes to other pages as needed */}
           </Routes>
         </div>
-        <Footer className="footer"/>
+        {/* <Footer className="footer"/> */}
       </div>
     </Router>
   );
