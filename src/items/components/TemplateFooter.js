@@ -5,11 +5,7 @@ import Card from "react-bootstrap/Card";
 import { Trash, CaretUpFill, CaretDownFill } from "react-bootstrap-icons"; // Import the Trash, CaretUpFill, and CaretDownFill icons
 import axios from "axios";
 
-const ItemFooter = ({
-  // onPlay,
-  // onNext,
-  // onUpdate,
-  // onStop,
+const TemplateFooter = ({
   onRemove,
   onMoveUp,
   onMoveDown,
@@ -37,7 +33,7 @@ const ItemFooter = ({
     axios
       .post("http://localhost:3002/data", { data: command })
       .then((response) => {
-        console.log("Success", response.data);
+        console.log(response.data);
       })
       .catch((error) => {
         console.error("Error", error);
@@ -122,4 +118,4 @@ const ItemFooter = ({
   );
 };
 
-export default ItemFooter;
+export default TemplateFooter;

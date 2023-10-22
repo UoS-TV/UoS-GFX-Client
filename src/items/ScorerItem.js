@@ -4,7 +4,7 @@ import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import ItemFooter from './components/ItemFooter';
+import TemplateFooter from './components/TemplateFooter';
 
 const ScorerItem = ({
   title,
@@ -70,7 +70,7 @@ const ScorerItem = ({
           </Row>
         </Form>
       </Card.Body>
-      <ItemFooter
+      <TemplateFooter
         onPlay={onPlay}
         onNext={onNext}
         onUpdate={onUpdate}
