@@ -4,12 +4,14 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import ItemFooter from "./components/ItemFooter";
+import InputGroup from "react-bootstrap/InputGroup";
+import Button from "react-bootstrap/Button"
+import TemplateFooter from "./components/TemplateFooter";
 import DynamicTags from "./components/DynamicTags";
-import axios from "axios"; // Import axios
-import { Button, InputGroup } from "react-bootstrap";
+import axios from "axios";
 
 const TemplateItem = ({ onRemove, onMoveUp, onMoveDown }) => {
+  const [title, setTitle] = useState("Template Item");
   const [channel, setChannel] = useState(1);
   const [layer, setLayer] = useState(20);
   const [selectedTemplate, setSelectedTemplate] = useState("Select Template");
@@ -44,7 +46,12 @@ const TemplateItem = ({ onRemove, onMoveUp, onMoveDown }) => {
 
   return (
     <Card style={{ margin: "10px" }}>
-      <Card.Header>Template Item</Card.Header>
+      <Card.Header>
+      <Form.Control
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+      </Card.Header>
       <Card.Body>
         <Form>
           <Row>
@@ -90,7 +97,7 @@ const TemplateItem = ({ onRemove, onMoveUp, onMoveDown }) => {
         </Form>
         <DynamicTags tags={tags} setTags={setTags} />
       </Card.Body>
-      <ItemFooter
+      <TemplateFooter
         onRemove={onRemove}
         onMoveUp={onMoveUp}
         onMoveDown={onMoveDown}
