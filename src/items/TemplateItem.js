@@ -5,51 +5,90 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import InputGroup from "react-bootstrap/InputGroup";
-import Button from "react-bootstrap/Button"
+import Button from "react-bootstrap/Button";
 import TemplateFooter from "./components/TemplateFooter";
 import DynamicTags from "./components/DynamicTags";
 import axios from "axios";
 
-const TemplateItem = ({ onRemove, onMoveUp, onMoveDown }) => {
-  const [title, setTitle] = useState("Template Item");
-  const [channel, setChannel] = useState(1);
-  const [layer, setLayer] = useState(20);
-  const [selectedTemplate, setSelectedTemplate] = useState("Select Template");
-  const [tags, setTags] = useState([
-    { id: "f0", text: "" },
-    { id: "f1", text: "" },
-  ]);
-  const [templateOptions, setTemplateOptions] = useState([]); // State for template options
+const TemplateItem = ({
+  item,
+  updateItem,
+  // title,
+  // setTitle,
+  // selectedTemplate,
+  // setSelectedTemplate,
+  // channel,
+  // setChannel,
+  // layer,
+  // setLayer,
+  // tags,
+  // setTags,
+  onRemove,
+  onMoveUp,
+  onMoveDown
+}) => {
+
+  // Local state for the form fields
+  const [localTitle, setLocalTitle] = useState(item.title);
+  const [localSelectedTemplate, setLocalSelectedTemplate] = useState(
+    item.selectedTemplate
+  );
+  const [localChannel, setLocalChannel] = useState(item.channel);
+  const [localLayer, setLocalLayer] = useState(item.layer);
+  const [localTags, setLocalTags] = useState(item.tags);
+
+  const [templateOptions, setTemplateOptions] = useState([]);
+
+  // Extract item properties
+  const { title, selectedTemplate, channel, layer, tags } = item;
 
   const fetchTemplateOptions = () => {
-    // Fetch template names from the server
     axios
       .get("http://localhost:3002/list-files")
       .then((response) => {
         setTemplateOptions(response.data.templates);
-        console.log(response.data.templates);
       })
       .catch((error) => {
         console.error("Error fetching template names:", error);
-        // Handle the error here, e.g., set an error state
       });
   };
 
+
+  const handleTitleChange = (newTitle) => {
+    setLocalTitle(newTitle);
+    updateItem({ title: newTitle });
+  };
+
+  const handleTemplateSelect = (selected) => {
+    setLocalSelectedTemplate(selected);
+    updateItem({ selectedTemplate: selected });
+  };
+
+  const handleChannelChange = (channel) => {
+    setLocalChannel(channel);
+    updateItem({ channel: channel });
+  };
+
+  const handleLayerChange = (layer) => {
+    setLocalLayer(layer);
+    updateItem({ layer: layer });
+  };
+
+  const handleTagsChange = (tags) => {
+    setLocalTags(tags);
+    updateItem({ tags: tags });
+  };
+
   useEffect(() => {
-    // Initial fetch when the component loads
     fetchTemplateOptions();
   }, []);
-
-  const handleTemplateSelect = (event) => {
-    setSelectedTemplate(event.target.value);
-  };
 
   return (
     <Card style={{ margin: "10px" }}>
       <Card.Header>
-      <Form.Control
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
+        <Form.Control
+          value={localTitle}
+          onChange={(e) => handleTitleChange(e.target.value)}
         />
       </Card.Header>
       <Card.Body>
@@ -59,8 +98,8 @@ const TemplateItem = ({ onRemove, onMoveUp, onMoveDown }) => {
               <InputGroup>
                 <FloatingLabel controlId="template" label="Template">
                   <Form.Select
-                    value={selectedTemplate}
-                    onChange={handleTemplateSelect}
+                    value={localSelectedTemplate}
+                    onChange={(e) => handleTemplateSelect(e.target.value)}
                   >
                     <option disabled>Select Template</option>
                     {templateOptions.map((template, index) => (
@@ -80,7 +119,7 @@ const TemplateItem = ({ onRemove, onMoveUp, onMoveDown }) => {
                 <Form.Control
                   type="number"
                   value={channel}
-                  onChange={(e) => setChannel(e.target.value)}
+                    onChange={(e) => handleChannelChange(e.target.value)}
                 />
               </FloatingLabel>
             </Col>
@@ -89,13 +128,13 @@ const TemplateItem = ({ onRemove, onMoveUp, onMoveDown }) => {
                 <Form.Control
                   type="number"
                   value={layer}
-                  onChange={(e) => setLayer(e.target.value)}
+                    onChange={(e) => handleLayerChange(e.target.value)}
                 />
               </FloatingLabel>
             </Col>
           </Row>
         </Form>
-        <DynamicTags tags={tags} setTags={setTags} />
+        <DynamicTags tags={localTags} setTags={handleTagsChange} />
       </Card.Body>
       <TemplateFooter
         onRemove={onRemove}
