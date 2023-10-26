@@ -2,11 +2,11 @@ import React from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Container from 'react-bootstrap/Container';
 import Image from 'react-bootstrap/Image';
-import logo from './logo.svg';
+import logo from './logo.png';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Rundown from './Rundown';
 import TextPage from './TextPage';
-import Footer from './Footer';
+// import Footer from './Footer';
 import './App.css'
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
               <a href="/" className="nav-link">Rundown</a>
-              <a href="/text" className="nav-link">Text Page</a>
+              {/* <a href="/text" className="nav-link">Text Page</a> */}
               {/* Add links to other pages as needed */}
             </Navbar.Collapse>
           </Container>
