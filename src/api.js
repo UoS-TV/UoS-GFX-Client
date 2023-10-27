@@ -37,11 +37,11 @@ function connect() {
 
 // function that reconnect the client to the server
 const reconnect = () => {
-  // console.log("Retrying connection to CasparCG server in 5s");
-  // setTimeout(() => {
-  //   client.removeAllListeners(); // the important line that enables you to reopen a connection
-  //   connect();
-  // }, 5000);
+  console.log("Retrying connection to CasparCG server in 5s");
+  setTimeout(() => {
+    client.removeAllListeners(); // the important line that enables you to reopen a connection
+    connect();
+  }, 5000);
 };
 
 connect();
