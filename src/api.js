@@ -7,9 +7,38 @@ console.log(config);
 const glob = require("glob");
 const path = require("path");
 const fs = require("fs");
+const xml2js = require("xml2js");
 
 app.use(cors());
 app.use(express.json());
+
+let casparConfig = {};
+
+// Define the path to your XML file
+const xmlFile = config.casparcg.configFile;
+
+// Read the XML file
+fs.readFile(xmlFile, "utf-8", (err, data) => {
+  if (err) {
+    console.error("Error reading XML file:", err);
+    return;
+  }
+
+  // Parse the XML data
+  const parser = new xml2js.Parser();
+  parser.parseString(data, (err, result) => {
+    if (err) {
+      console.error("Error parsing XML:", err);
+      return;
+    }
+    console.log(result);
+    casparConfig = {
+      channels: result.configuration.channels.length,
+      port: result.configuration.controllers[0].tcp[0].port[0],
+    };
+    console.log(casparConfig);
+  });
+});
 
 let client = new net.Socket();
 

@@ -8,6 +8,7 @@
   "casparcg": {
     "host": "127.0.0.1",
     "port": 5250,
+    "configFile": "C:/casparcg/casparcg.config",
     "templateLocation": "C:/casparcg/template/",
     "mediaLocation": "C:/casparcg/media/"
   }
