@@ -6,29 +6,21 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
-import TemplateFooter from "./components/TemplateFooter";
-import MediaFooter from "./components/MediaFooter";
-import DynamicTags from "./components/DynamicTags";
+import TemplateFooter from "./TemplateFooter";
+import MediaFooter from "./MediaFooter";
+import DynamicTags from "./DynamicTags";
 import axios from "axios";
-import ScoreTags from "./components/ScoreTags";
+import ScoreTags from "./ScoreTags";
 
-const TemplateItem = ({
+const Item = ({
   selectedItem,
   item,
   updateItem,
   onRemove,
   onMoveUp,
   onMoveDown,
+  casparCommands,
 }) => {
-  // Local state for the form fields
-  // const [localTitle, setLocalTitle] = useState(item.title);
-  // const [localselectedSource, setLocalselectedSource] = useState(
-    // item.selectedSource
-  // );
-  // const [localChannel, setLocalChannel] = useState(item.channel);
-  // const [localLayer, setLocalLayer] = useState(item.layer);
-  // const [localTags, setLocalTags] = useState(item.tags);
-
   const [templateOptions, setTemplateOptions] = useState([]);
   const [mediaOptions, setMediaOptions] = useState([]);
 
@@ -47,28 +39,7 @@ const TemplateItem = ({
       });
   };
 
-  const handleTitleChange = (newTitle) => {
-    // setLocalTitle(newTitle);
-    updateItem({ title: newTitle });
-  };
-
-  const handleSelect = (selected) => {
-    // setLocalselectedSource(selected);
-    updateItem({ selectedSource: selected });
-  };
-
-  const handleChannelChange = (channel) => {
-    // setLocalChannel(channel);
-    updateItem({ channel: channel });
-  };
-
-  const handleLayerChange = (layer) => {
-    // setLocalLayer(layer);
-    updateItem({ layer: layer });
-  };
-
   const handleTagsChange = (tags) => {
-    // setLocalTags(tags);
     updateItem({ tags: tags });
   };
 
@@ -85,7 +56,7 @@ const TemplateItem = ({
       <Card.Header>
         <Form.Control
           value={title}
-          onChange={(e) => handleTitleChange(e.target.value)}
+          onChange={(e) => updateItem({ title: e.target.value })}
         />
       </Card.Header>
       <Card.Body>
@@ -97,7 +68,9 @@ const TemplateItem = ({
                   <FloatingLabel controlId="template" label="Template">
                     <Form.Select
                       value={selectedSource}
-                      onChange={(e) => handleSelect(e.target.value)}
+                      onChange={(e) =>
+                        updateItem({ selectedSource: e.target.value })
+                      }
                     >
                       <option disabled>Select Template</option>
                       {templateOptions.map((template, index) => (
@@ -117,7 +90,9 @@ const TemplateItem = ({
                   <FloatingLabel controlId="media" label="Media">
                     <Form.Select
                       value={selectedSource}
-                      onChange={(e) => handleSelect(e.target.value)}
+                      onChange={(e) =>
+                        updateItem({ selectedSource: e.target.value })
+                      }
                     >
                       <option disabled>Select Media</option>
                       {mediaOptions.map((media, index) => (
@@ -138,7 +113,7 @@ const TemplateItem = ({
                 <Form.Control
                   type="number"
                   value={channel}
-                  onChange={(e) => handleChannelChange(e.target.value)}
+                  onChange={(e) => updateItem({ channel: e.target.value })}
                 />
               </FloatingLabel>
             </Col>
@@ -147,7 +122,7 @@ const TemplateItem = ({
                 <Form.Control
                   type="number"
                   value={layer}
-                  onChange={(e) => handleLayerChange(e.target.value)}
+                  onChange={(e) => updateItem({ layer: e.target.value })}
                 />
               </FloatingLabel>
             </Col>
@@ -157,7 +132,12 @@ const TemplateItem = ({
           <DynamicTags tags={tags} setTags={handleTagsChange} />
         )}
         {item.type === "Scorer" && (
-          <ScoreTags channel={channel} layer={layer} tags={tags} setTags={handleTagsChange} />
+          <ScoreTags
+            channel={channel}
+            layer={layer}
+            tags={tags}
+            setTags={handleTagsChange}
+          />
         )}
       </Card.Body>
       {item.type !== "Media" && (
@@ -168,7 +148,8 @@ const TemplateItem = ({
           selectedTemplate={selectedSource}
           channel={channel}
           layer={layer}
-          dynamicTags={tags}
+          tags={tags}
+          casparCommands={casparCommands}
         />
       )}
       {item.type === "Media" && (
@@ -179,11 +160,11 @@ const TemplateItem = ({
           selectedMedia={selectedSource}
           channel={channel}
           layer={layer}
-          dynamicTags={tags}
+          casparCommands={casparCommands}
         />
       )}
     </Card>
   );
 };
 
-export default TemplateItem;
+export default Item;

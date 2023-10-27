@@ -1,17 +1,18 @@
 import React from "react";
-import TemplateItem from "../Item";
+import Item from "./Item";
 
-const TemplateItemContainer = ({ item, updateItem, onRemove, onMoveUp, onMoveDown, selectedItem }) => {
+const ItemContainer = ({ item, updateItem, onRemove, onMoveUp, onMoveDown, selectedItem, casparCommands }) => {
   return (
-    <TemplateItem
+    <Item
     selectedItem={selectedItem}
       item={item}
       updateItem={(newProperties) => updateItem(item.id, newProperties)}
       onRemove={onRemove}
       onMoveUp={onMoveUp}
       onMoveDown={onMoveDown}
+      casparCommands={casparCommands}
     />
   );
 };
 
-export default TemplateItemContainer;
+export default ItemContainer;

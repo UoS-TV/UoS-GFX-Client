@@ -51,34 +51,6 @@ const ScoreTags = ({ channel, layer, tags, setTags }) => {
     setTeams(updatedTeams);
   };
 
-  const formatTags = (data) => {
-    // Convert the dynamic tags array to the desired format
-    const formattedTags = data.reduce((acc, tag) => {
-      acc[tag.id] = tag.text;
-      return acc;
-    }, {});
-
-    const formattedTagsString = JSON.stringify(formattedTags).replace(
-      /"/g,
-      '\\"'
-    );
-    const finalString = ` "${formattedTagsString}"`;
-    return finalString;
-  };
-
-  // useEffect(() => {
-  //   const command =
-  //     "CG " + channel + "-" + layer + " UPDATE 1 " + formatTags(tags);
-  //   axios
-  //     .post("http://localhost:3002/data", { data: command })
-  //     .then((response) => {
-  //       console.log(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error", error);
-  //     });
-  // });
-
   return (
     <Row>
       {teams.map((team, index) => (
@@ -110,7 +82,7 @@ const ScoreTags = ({ channel, layer, tags, setTags }) => {
           <InputGroup>
             <Button
               variant="outline-secondary"
-              onClick={() => 
+              onClick={() =>
                 handleTagChange(index, "score", team.score - vals[2])
               }
             >
@@ -118,7 +90,7 @@ const ScoreTags = ({ channel, layer, tags, setTags }) => {
             </Button>
             <Button
               variant="outline-info"
-              onClick={() => 
+              onClick={() =>
                 handleTagChange(index, "score", team.score - vals[1])
               }
             >
@@ -126,7 +98,7 @@ const ScoreTags = ({ channel, layer, tags, setTags }) => {
             </Button>
             <Button
               variant="outline-primary"
-              onClick={() => 
+              onClick={() =>
                 handleTagChange(index, "score", team.score - vals[0])
               }
             >
@@ -134,15 +106,13 @@ const ScoreTags = ({ channel, layer, tags, setTags }) => {
             </Button>
             <FormControl
               value={team.score}
-              onChange={(e) => 
-                handleTagChange(index, "score", e.target.value)
-              }
+              onChange={(e) => handleTagChange(index, "score", e.target.value)}
               type="number"
               className="text-center"
             />
             <Button
               variant="outline-primary"
-              onClick={() => 
+              onClick={() =>
                 handleTagChange(index, "score", team.score + vals[0])
               }
             >
@@ -150,7 +120,7 @@ const ScoreTags = ({ channel, layer, tags, setTags }) => {
             </Button>
             <Button
               variant="outline-info"
-              onClick={() => 
+              onClick={() =>
                 handleTagChange(index, "score", team.score + vals[1])
               }
             >
@@ -158,7 +128,7 @@ const ScoreTags = ({ channel, layer, tags, setTags }) => {
             </Button>
             <Button
               variant="outline-secondary"
-              onClick={() => 
+              onClick={() =>
                 handleTagChange(index, "score", team.score + vals[2])
               }
             >
@@ -166,9 +136,7 @@ const ScoreTags = ({ channel, layer, tags, setTags }) => {
             </Button>
             <Button
               variant="outline-danger"
-              onClick={() => 
-                handleTagChange(index, "score", 0)
-              }
+              onClick={() => handleTagChange(index, "score", 0)}
             >
               Reset
             </Button>

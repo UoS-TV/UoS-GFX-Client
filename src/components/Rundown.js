@@ -9,9 +9,9 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Form from "react-bootstrap/Form";
 import LoadRundownModal from "./LoadRundownModal";
 
-import TemplateItemContainer from "./items/components/ItemContainer";
+import ItemContainer from "./items/ItemContainer";
 
-const Rundown = () => {
+const Rundown = ({ casparCommands }) => {
   const [rundownId, setRundownId] = useState(uuidv4());
   const [rundownName, setRundownName] = useState("");
   const [items, setItems] = useState([]);
@@ -135,7 +135,9 @@ const Rundown = () => {
     <Container>
       <InputGroup className="mb-3">
         {/* Button to open the modal */}
-        <Button onClick={openModal}>Load Rundown</Button>
+        <Button 
+        variant="secondary"
+        onClick={openModal}>Load Rundown</Button>
 
         {/* Modal to select and load a rundown */}
         <LoadRundownModal
@@ -152,20 +154,21 @@ const Rundown = () => {
             setRundownName(e.target.value);
           }}
         />
-        <Button variant="outline-primary" onClick={saveRundown}>
+        <Button variant="primary" onClick={saveRundown}>
           Save Rundown
         </Button>
       </InputGroup>
       <Row>
         {items.map((item) => (
           <div key={item.id} onClick={() => setSelectedItem(item)}>
-            <TemplateItemContainer
+            <ItemContainer
               selectedItem={item === selectedItem}
               item={item}
               updateItem={updateItem}
               onRemove={() => removeItem(item.id)}
               onMoveUp={() => moveItemUp(item.id)}
               onMoveDown={() => moveItemDown(item.id)}
+              casparCommands={casparCommands}
             />
           </div>
         ))}
