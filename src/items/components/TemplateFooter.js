@@ -57,12 +57,7 @@ const TemplateFooter = ({
   };
 
   const onNext = () => {
-    const payload =
-      "CG " +
-      channel +
-      "-" +
-      layer +
-      ' NEXT ';
+    const payload = "CG " + channel + "-" + layer + " NEXT ";
     console.log(payload);
     // Send the payload to your CasparCG server
     send(payload);
@@ -70,12 +65,7 @@ const TemplateFooter = ({
 
   const onUpdate = () => {
     const payload =
-      "CG " +
-      channel +
-      "-" +
-      layer +
-      ' UPDATE 1 ' +
-      formatTags(dynamicTags);
+      "CG " + channel + "-" + layer + " UPDATE 1 " + formatTags(dynamicTags);
     console.log(payload);
     // Send the payload to your CasparCG server
     send(payload);

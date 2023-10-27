@@ -7,24 +7,25 @@ import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import InputGroup from "react-bootstrap/InputGroup";
 import Form from "react-bootstrap/Form";
-import MediaItem from "./items/MediaItem";
-import ScorerItem from "./items/ScorerItem";
 import LoadRundownModal from "./LoadRundownModal";
 
-import TemplateItemContainer from "./items/components/TemplateItemContainer";
+import TemplateItemContainer from "./items/components/ItemContainer";
 
 const Rundown = () => {
+  const [rundownId, setRundownId] = useState(uuidv4());
   const [rundownName, setRundownName] = useState("");
   const [items, setItems] = useState([]);
   const [loadedRundowns, setLoadedRundowns] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
+  const [selectedItem, setSelectedItem] = useState(null);
+
   const addItem = (type) => {
     const newItem = {
       id: uuidv4(),
       type: type,
-      title: "Template Item",
-      selectedTemplate: "Select Template",
+      title: type + " Item",
+      selectedSource: "",
       channel: 1,
       layer: 20,
       tags: [
@@ -116,7 +117,7 @@ const Rundown = () => {
 
   const saveRundown = () => {
     const dataToSave = {
-      id: uuidv4(),
+      id: rundownId,
       rundownName,
       items,
     };
@@ -157,26 +158,15 @@ const Rundown = () => {
       </InputGroup>
       <Row>
         {items.map((item) => (
-          <div key={item.id}>
-            {item.type === "Template" && (
-              <TemplateItemContainer
-                item={item}
-                updateItem={updateItem}
-                onRemove={() => removeItem(item.id)}
-                onMoveUp={() => moveItemUp(item.id)}
-                onMoveDown={() => moveItemDown(item.id)}
-              />
-            )}
-            {item.type === "Media" && (
-              <MediaItem
-              // Pass MediaItem-related props
-              />
-            )}
-            {item.type === "Scorer" && (
-              <ScorerItem
-              // Pass ScorerItem-related props
-              />
-            )}
+          <div key={item.id} onClick={() => setSelectedItem(item)}>
+            <TemplateItemContainer
+              selectedItem={item === selectedItem}
+              item={item}
+              updateItem={updateItem}
+              onRemove={() => removeItem(item.id)}
+              onMoveUp={() => moveItemUp(item.id)}
+              onMoveDown={() => moveItemDown(item.id)}
+            />
           </div>
         ))}
       </Row>
@@ -184,15 +174,15 @@ const Rundown = () => {
         <Button variant="outline-primary" onClick={() => addItem("Template")}>
           Add Template
         </Button>
-        {/* <Button variant="outline-primary" onClick={() => addItem("Media")}>
+        <Button variant="outline-primary" onClick={() => addItem("Media")}>
           Add Media
         </Button>
         <Button variant="outline-primary" onClick={() => addItem("Scorer")}>
           Add Scorer
-        </Button> */}
-        <Button variant="dark" onClick={() => console.table(items)}>
-          Console Log Items
         </Button>
+        {/* <Button variant="dark" onClick={() => console.table(items)}>
+          Console Log Items
+        </Button> */}
       </ButtonGroup>
     </Container>
   );
