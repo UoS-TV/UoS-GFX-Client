@@ -7,7 +7,8 @@ import FloatingLabel from "react-bootstrap/FloatingLabel";
 import { Col, Row } from "react-bootstrap";
 
 const ScoreTags = ({ channel, layer, tags, setTags }) => {
-  const [vals, setVals] = useState([1, 3, 5]);
+  // const [vals, setVals] = useState([1, 3, 5]);
+  const vals = [1, 3, 5];
   const [teams, setTeams] = useState([
     {
       nameId: "f0",

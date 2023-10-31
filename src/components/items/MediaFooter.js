@@ -3,7 +3,6 @@ import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Card from "react-bootstrap/Card";
 import { Trash, CaretUpFill, CaretDownFill } from "react-bootstrap-icons";
-import axios from "axios";
 
 const ItemFooter = ({
   onRemove,
