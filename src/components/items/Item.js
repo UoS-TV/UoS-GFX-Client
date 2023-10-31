@@ -49,8 +49,8 @@ const Item = ({
 
   return (
     <Card
-      border={selectedItem ? "danger" : ""}
-      style={{ backgroundColor: `${selectedItem ? "#FF000011" : ""}` }}
+      // border={selectedItem ? "danger" : ""}
+      // style={{ backgroundColor: `${selectedItem ? "#FF000011" : ""}` }}
       className="mb-3"
     >
       <Card.Header>

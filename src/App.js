@@ -14,6 +14,16 @@ const App = () => {
   const [casparSent, setCasparSent] = useState("");
   const [casparResponse, setCasparResponse] = useState("");
 
+  axios
+      .post("http://localhost:3002/config")
+      .then((response) => {
+        console.log(response.data);
+        // setCasparResponse(response.data);
+      })
+      .catch((error) => {
+        console.error("Error", error);
+      });
+
   const formatTags = (data) => {
     // Convert the dynamic tags array to the desired format
     const formattedTags = data.reduce((acc, tag) => {
@@ -53,9 +63,7 @@ const App = () => {
           " ADD 1 " +
           command.selectedTemplate +
           " 1 " +
-          '"' +
-          formatTags(command.tags) +
-          '"'
+          formatTags(command.tags)
       );
     },
     cgNext: (command) => {
@@ -68,9 +76,7 @@ const App = () => {
           "-" +
           command.layer +
           " UPDATE 1 " +
-          '"' +
-          formatTags(command.tags) +
-          '"'
+          formatTags(command.tags)
       );
     },
     cgStop: (command) => {
