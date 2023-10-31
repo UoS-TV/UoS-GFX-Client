@@ -120,7 +120,7 @@ const App = () => {
   return (
     <Router>
       <div className="app">
-        <Navbar bg="light" expand="lg" className="sticky-top">
+        <Navbar expand="lg" className="sticky-top">
           <Container>
             <Navbar.Brand>
               <Image src={logo} alt="Logo" height="40" />

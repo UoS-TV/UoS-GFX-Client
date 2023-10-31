@@ -11,6 +11,7 @@ html, body {
 }
 
 .sticky-top {
+  background-color: #151718;
   position: sticky;
   top: 0;
   z-index: 1000; /* Adjust the z-index as needed */
@@ -23,8 +24,7 @@ html, body {
 }
 
 .footer {
-  background-color: #333;
-  color: #fff;
+  background-color: #151718;
   text-align: center;
   padding: 10px 0;
   position: sticky;
