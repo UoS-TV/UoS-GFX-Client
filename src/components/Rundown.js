@@ -13,7 +13,6 @@ import ItemContainer from "./items/ItemContainer";
 
 const Rundown = ({ casparCommands }) => {
   // const [rundownId, setRundownId] = useState(uuidv4());
-  const rundownId = uuidv4();
   const [rundownName, setRundownName] = useState("");
   const [items, setItems] = useState([]);
   const [loadedRundowns, setLoadedRundowns] = useState([]);
@@ -118,7 +117,7 @@ const Rundown = ({ casparCommands }) => {
 
   const saveRundown = () => {
     const dataToSave = {
-      id: rundownId,
+      id: uuidv4(),
       rundownName,
       items,
     };
