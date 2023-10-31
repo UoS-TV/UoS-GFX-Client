@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Card from "react-bootstrap/Card";
+import Accordion from "react-bootstrap/Accordion";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
@@ -60,85 +61,96 @@ const Item = ({
         />
       </Card.Header>
       <Card.Body>
-        <Form>
-          <Row>
-            <Col md={8}>
-              {item.type !== "Media" && (
-                <InputGroup>
-                  <FloatingLabel controlId="template" label="Template">
-                    <Form.Select
-                      value={selectedSource}
-                      onChange={(e) =>
-                        updateItem({ selectedSource: e.target.value })
-                      }
-                    >
-                      <option disabled>Select Template</option>
-                      {templateOptions.map((template, index) => (
-                        <option key={index} value={template}>
-                          {template}
-                        </option>
-                      ))}
-                    </Form.Select>
-                  </FloatingLabel>
-                  <Button onClick={fetchOptions} variant="outline-info">
-                    Refresh
-                  </Button>
-                </InputGroup>
+        <Accordion defaultActiveKey="0">
+          <Accordion.Item eventKey="0">
+            <Accordion.Header>
+              {item.type}: {selectedSource} | Channel: {channel} | Layer: {layer}
+            </Accordion.Header>
+            <Accordion.Body>
+              <Form>
+                <Row>
+                  <Col md={8}>
+                    {item.type !== "Media" && (
+                      <InputGroup>
+                        <FloatingLabel controlId="template" label="Template">
+                          <Form.Select
+                            value={selectedSource}
+                            onChange={(e) =>
+                              updateItem({ selectedSource: e.target.value })
+                            }
+                          >
+                            <option disabled>Select Template</option>
+                            {templateOptions.map((template, index) => (
+                              <option key={index} value={template}>
+                                {template}
+                              </option>
+                            ))}
+                          </Form.Select>
+                        </FloatingLabel>
+                        <Button onClick={fetchOptions} variant="outline-info">
+                          Refresh
+                        </Button>
+                      </InputGroup>
+                    )}
+                    {item.type === "Media" && (
+                      <InputGroup>
+                        <FloatingLabel controlId="media" label="Media">
+                          <Form.Select
+                            value={selectedSource}
+                            onChange={(e) =>
+                              updateItem({ selectedSource: e.target.value })
+                            }
+                          >
+                            <option disabled>Select Media</option>
+                            {mediaOptions.map((media, index) => (
+                              <option key={index} value={media}>
+                                {media}
+                              </option>
+                            ))}
+                          </Form.Select>
+                        </FloatingLabel>
+                        <Button onClick={fetchOptions} variant="outline-info">
+                          Refresh
+                        </Button>
+                      </InputGroup>
+                    )}
+                  </Col>
+                  <Col md={2}>
+                    <FloatingLabel controlId="channel" label="Channel">
+                      <Form.Control
+                        type="number"
+                        value={channel}
+                        onChange={(e) =>
+                          updateItem({ channel: e.target.value })
+                        }
+                      />
+                    </FloatingLabel>
+                  </Col>
+                  <Col md={2}>
+                    <FloatingLabel controlId="layer" label="Layer">
+                      <Form.Control
+                        type="number"
+                        value={layer}
+                        onChange={(e) => updateItem({ layer: e.target.value })}
+                      />
+                    </FloatingLabel>
+                  </Col>
+                </Row>
+              </Form>
+              {item.type === "Template" && (
+                <DynamicTags tags={tags} setTags={handleTagsChange} />
               )}
-              {item.type === "Media" && (
-                <InputGroup>
-                  <FloatingLabel controlId="media" label="Media">
-                    <Form.Select
-                      value={selectedSource}
-                      onChange={(e) =>
-                        updateItem({ selectedSource: e.target.value })
-                      }
-                    >
-                      <option disabled>Select Media</option>
-                      {mediaOptions.map((media, index) => (
-                        <option key={index} value={media}>
-                          {media}
-                        </option>
-                      ))}
-                    </Form.Select>
-                  </FloatingLabel>
-                  <Button onClick={fetchOptions} variant="outline-info">
-                    Refresh
-                  </Button>
-                </InputGroup>
+              {item.type === "Scorer" && (
+                <ScoreTags
+                  channel={channel}
+                  layer={layer}
+                  tags={tags}
+                  setTags={handleTagsChange}
+                />
               )}
-            </Col>
-            <Col md={2}>
-              <FloatingLabel controlId="channel" label="Channel">
-                <Form.Control
-                  type="number"
-                  value={channel}
-                  onChange={(e) => updateItem({ channel: e.target.value })}
-                />
-              </FloatingLabel>
-            </Col>
-            <Col md={2}>
-              <FloatingLabel controlId="layer" label="Layer">
-                <Form.Control
-                  type="number"
-                  value={layer}
-                  onChange={(e) => updateItem({ layer: e.target.value })}
-                />
-              </FloatingLabel>
-            </Col>
-          </Row>
-        </Form>
-        {item.type === "Template" && (
-          <DynamicTags tags={tags} setTags={handleTagsChange} />
-        )}
-        {item.type === "Scorer" && (
-          <ScoreTags
-            channel={channel}
-            layer={layer}
-            tags={tags}
-            setTags={handleTagsChange}
-          />
-        )}
+            </Accordion.Body>
+          </Accordion.Item>
+        </Accordion>
       </Card.Body>
       {item.type !== "Media" && (
         <TemplateFooter
