@@ -1,13 +1,15 @@
-import React from "react";
 import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
 import { Trash } from "react-bootstrap-icons";
+import { v4 as uuidv4 } from "uuid";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Tooltip from "react-bootstrap/Tooltip";
 
 const DynamicTags = ({ tags, setTags }) => {
   const addTag = () => {
-    const newTagId = `f${tags.length}`;
-    const newTag = { id: newTagId, text: "" };
+    const newTagkey = `f${tags.length}`;
+    const newTag = { id: uuidv4(), key: newTagkey, data: "" };
     setTags([...tags, newTag]);
   };
 
@@ -27,21 +29,34 @@ const DynamicTags = ({ tags, setTags }) => {
   };
 
   return (
-    <div className="my-2">
+    <div className="mb-2">
       {tags.map((tag) => (
         <InputGroup key={tag.id}>
-          <FormControl
-            size="sm" // Set size to 'sm' for small
-            placeholder="Key (e.g. f0)"
-            value={tag.id}
-            onChange={(e) => handleTagChange(tag.id, "id", e.target.value)}
-          />
+          <OverlayTrigger
+            placement="top"
+            delay={{ show: 250, hide: 400 }}
+            overlay={<Tooltip><b>Template Keys</b><br />Named placeholders in CasparCG templates that indicate where dynamic content (like text, images, or numbers) should go (e.g. f0).</Tooltip>}
+          >
+            <FormControl
+            className='w-10'
+              size="sm" // Set size to 'sm' for small
+              placeholder="Key"
+              value={tag.key}
+              onChange={(e) => handleTagChange(tag.id, "key", e.target.value)}
+            />
+          </OverlayTrigger>
+          <OverlayTrigger
+            placement="top"
+            delay={{ show: 250, hide: 400 }}
+            overlay={<Tooltip><b>Key Value</b><br />The actual content that fills in the template keys. These values can change on the fly, allowing for dynamic, data-driven graphics (e.g someone's first name).</Tooltip>}
+          >
           <FormControl
             size="sm" // Set size to 'sm' for small
             placeholder="Data (e.g. First Name)"
             value={tag.text}
             onChange={(e) => handleTagChange(tag.id, "text", e.target.value)}
           />
+          </OverlayTrigger>
           <Button
             variant="outline-danger"
             size="sm"
